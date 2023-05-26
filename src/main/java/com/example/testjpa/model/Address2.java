@@ -30,13 +30,13 @@ public class Address2 {
     @Column(name = "home")
     private int home;
 
-//    @ManyToMany (mappedBy = "addresses2")
+    @ManyToMany(mappedBy = "addresses2")
 //    @JsonBackReference
-    @ManyToMany
-    @JoinTable(
-            name = "workers2_addresses2",
-            joinColumns = @JoinColumn(name = "addresses2_id"),
-            inverseJoinColumns = @JoinColumn(name = "workers2_id")
-    )
-    private Set<Worker2> workers2 = new HashSet<>();
+//    @ManyToMany
+//    @JoinTable(
+//            name = "workers2_addresses2",
+//            joinColumns = @JoinColumn(name = "addresses2_id"),
+//            inverseJoinColumns = @JoinColumn(name = "workers2_id")
+//    )
+    private List<Worker2> workers2 = new ArrayList<>();
 }

@@ -1,5 +1,7 @@
 package com.example.testjpa.controller;
 
+import com.example.testjpa.dto.AddressXResponseDto;
+import com.example.testjpa.dto.WorkerXResponseDto;
 import com.example.testjpa.model.Address;
 import com.example.testjpa.model.Worker;
 import com.example.testjpa.repository.AddressesRepository;
@@ -8,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/addresses")
@@ -16,11 +19,29 @@ import java.util.List;
 public class AddressesController {
     private AddressesRepository addressesRepository;
 
-    @GetMapping(value = "/get-all")
-    public List<Address> getAll() {
-        List<Address> temp = addressesRepository.findAll();
+    private List<WorkerXResponseDto> workersToDto(List<Worker> workers) {
+        return workers.stream().map(
+                worker -> WorkerXResponseDto.builder()
+                        .id(worker.getId())
+                        .name(worker.getName())
+                        .build()
+        ).collect(Collectors.toList());
+    }
 
-        return temp;
+    @GetMapping(value = "/get-all")
+    public List<AddressXResponseDto> getAll() {
+        return addressesRepository.findAll().stream().map(
+                address -> AddressXResponseDto.builder()
+                        .id(address.getId())
+                        .home(address.getHome())
+                        .street(address.getStreet())
+                        .workers(workersToDto(address.getWorkers()))
+                        .build()
+        ).collect(Collectors.toList());
+
+//        List<Address> temp = addressesRepository.findAll();
+//
+//        return temp;
     }
 
     @GetMapping(value = "/get-by-id/{id}")
@@ -31,7 +52,7 @@ public class AddressesController {
     }
 
     @DeleteMapping(value = "delete-by-id/{id}")
-    public void deleteById(@PathVariable int id){
+    public void deleteById(@PathVariable int id) {
         addressesRepository.deleteById(id);
     }
 }

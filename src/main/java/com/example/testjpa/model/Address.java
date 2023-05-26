@@ -27,8 +27,8 @@ public class Address {
     @Column(name = "home")
     private int home;
 
-//    @OneToOne(mappedBy = "address")
-//    private Worker worker;
+    @OneToMany(mappedBy = "address")
+    private List<Worker> workers = new ArrayList<>();
 //
 //    @OneToMany(mappedBy = "address")
 //    private List<Worker> workers = new ArrayList<>();
